@@ -4,12 +4,12 @@ type VideoCardProps = {
   video: Video;
 };
 
-const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api/v1";
+const apiBase = import.meta.env.VITE_API_URL || "https://opencourse-dev.onrender.com/api/v1";
 const apiOrigin = (() => {
   try {
     return new URL(apiBase).origin;
   } catch {
-    return "http://localhost:4000";
+    return "https://opencourse-dev.onrender.com";
   }
 })();
 

@@ -51,15 +51,11 @@ export const initializeAdminAuth = createAsyncThunk('admin/initializeAdminAuth',
 export const loginAdmin = createAsyncThunk(
 	'admin/loginAdmin',
 	async (
-		payload: { email: string; password: string; adminSecret: string },
+		payload: { email: string; password: string },
 		{ rejectWithValue },
 	) => {
 		try {
-			const response = await adminApi.login(
-				payload.email,
-				payload.password,
-				payload.adminSecret,
-			);
+			const response = await adminApi.login(payload.email, payload.password);
 			const parsed = extractAdminPayload(response.data);
 			writeAdminStorage(parsed.token, parsed.admin);
 			return parsed;

@@ -2,8 +2,8 @@ import adminClient from "./adminClient";
 
 export const adminApi = {
 
-  login: (email: string, password: string, adminSecret: string) =>
-    adminClient.post("/admin/login", { email, password, adminSecret }),
+  login: (email: string, password: string) =>
+    adminClient.post("/admin/login", { email, password }),
 
 
   getDashboard: () => adminClient.get("/admin/dashboard"),
