@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: aaryan359/opencourse-backend:latest # Replace 'aaryan359' with your Docker Hub username
+          image: Ayushdk/opencourse-backend:latest # Replace 'Ayushdk' with your Docker Hub username
           imagePullPolicy: Always
           ports:
             - containerPort: 4004
@@ -31,7 +31,7 @@ spec:
             - name: TRUST_PROXY
               value: "1"
             - name: ALLOWED_ORIGINS
-              value: "http://localhost:5173,https://aaryan359.github.io"
+              value: "http://localhost:5173,https://ayushdk.github.io,https://ayushdk.github.io/opencourse-dev"
             # Load sensitive credentials securely from the Kubernetes Secret
             - name: MONGO_URI
               valueFrom:
