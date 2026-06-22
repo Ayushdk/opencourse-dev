@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { coursesApi } from "../../api/courses.api";
+import { videosApi } from "../../api/videos.api";
 
 
 const C = {
@@ -44,7 +45,7 @@ export default function CourseOverviewPage() {
         if (!c) throw new Error("Course not found");
         setCourse(c);
         // 2. Fetch Topics for Course
-        return coursesApi.listTopics(c._id);
+        return coursesApi.getTopicsByCourseId(c._id);
       })
       .then(res => setTopics(res.data?.data || []))
       .catch(err => setError(err?.response?.data?.message || err.message || "Failed to load course"))
@@ -64,7 +65,7 @@ export default function CourseOverviewPage() {
     if (!topicVideos[topicId]) {
       setLoadingVideos(topicId);
       try {
-        const res = await publicApi.listVideos(topicId);
+        const res = await videosApi.listByTopic(topicId);
         // Only keep approved videos for public view
         const approvedVideos = (res.data?.data || []).filter((v: any) => v.status === "approved");
         setTopicVideos(prev => ({ ...prev, [topicId]: approvedVideos }));

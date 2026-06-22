@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import course 
+import { coursesApi, fieldsApi } from "../../api/courses.api";
 
 // ─── Constants & Types ────────────────────────────────────────────────────────
 const C = {
@@ -25,16 +25,16 @@ export default function CoursesPage() {
 
   useEffect(() => {
     // 1. Fetch fields
-    publicApi.listFields().then(res => setFields(res.data?.data || [])).catch(() => { });
+    fieldsApi.getAllFields().then(res => setFields(res.data?.data || [])).catch(() => { });
   }, []);
 
   useEffect(() => {
     // 2. Fetch courses — with field & level filters
     setLoading(true);
-    publicApi.listCourses({
+    coursesApi.getAllCourses({
       field: selectedField || undefined,
       level: selectedLevel || undefined,
-      limit: 100
+      limit: 100,
     })
       .then(res => setCourses(res.data?.data || []))
       .catch(() => { })
