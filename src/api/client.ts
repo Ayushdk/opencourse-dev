@@ -5,8 +5,8 @@ import {
 } from "@/redux/helper/token";
 import { clearAuthStorage } from "@/redux/helper/storage";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
-const IS_NGROK_URL = /ngrok-free\.(dev|app)/i.test(BASE_URL ?? "");
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api/v1";
+const IS_NGROK_URL = /ngrok-free\.(dev|app)/i.test(BASE_URL);
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
