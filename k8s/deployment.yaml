@@ -28,10 +28,8 @@ spec:
           env:
             - name: PORT
               value: "4004"
-            - name: TRUST_PROXY
-              value: "1"
-            - name: ALLOWED_ORIGINS
-              value: "http://localhost:5173,https://ayushdk.github.io,https://ayushdk.github.io/opencourse-dev"
+            - name: FRONTEND_URL
+              value: "https://ayushdk.github.io/opencourse-dev/"
             # Load sensitive credentials securely from the Kubernetes Secret
             - name: MONGO_URI
               valueFrom:
@@ -45,11 +43,6 @@ spec:
                   key: JWT_SECRET
             - name: JWT_EXPIRY
               value: "7d"
-            - name: ADMIN_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: opencourse-backend-secrets
-                  key: ADMIN_SECRET
           # Resource constraints to prevent your containers from hogging cluster memory
           resources:
             requests:

@@ -6,7 +6,6 @@ import {
 import { clearAuthStorage } from "@/redux/helper/storage";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "https://opencourse-dev.onrender.com/api/v1";
-const IS_NGROK_URL = /ngrok-free\.(dev|app)/i.test(BASE_URL);
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
@@ -19,11 +18,6 @@ apiClient.interceptors.request.use((config) => {
   const token = getStoredToken(AUTH_TOKEN_KEY);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  // Prevent ngrok's browser interstitial from returning an HTML 200 response.
-  if (IS_NGROK_URL) {
-    config.headers["ngrok-skip-browser-warning"] = "true";
   }
 
   return config;

@@ -14,50 +14,17 @@ import { connectDB } from './config/db';
 const app: Application = express();
 
 const REQUEST_BODY_LIMIT = process.env.REQUEST_BODY_LIMIT ?? '2mb';
-const TRUST_PROXY_RAW = process.env.TRUST_PROXY ?? '1';
+const FRONTEND_URL = process.env.FRONTEND_URL ?? 'https://ayushdk.github.io/opencourse-dev/';
 
-const parseTrustProxy = (value: string): boolean | number => {
-    const normalized = value.trim().toLowerCase();
-
-    if (normalized === 'true') return true;
-    if (normalized === 'false') return false;
-
-    const asNumber = Number(normalized);
-    if (!Number.isNaN(asNumber)) return asNumber;
-
-    return true;
-};
-
-app.set('trust proxy', parseTrustProxy(TRUST_PROXY_RAW));
-
-const parseAllowedOrigins = (rawOrigins?: string): string[] => {
-    if (!rawOrigins) return [];
-
-    const normalized = rawOrigins.trim();
-
-    // Support JSON array format and simple comma-separated format.
-    if (normalized.startsWith('[')) {
-        try {
-            const parsed = JSON.parse(normalized);
-            if (Array.isArray(parsed)) {
-                return parsed
-                    .map((origin) => String(origin).trim())
-                    .filter(Boolean)
-                    .map((origin) => origin.replace(/\/+$/, ''));
-            }
-        } catch {
-            // Fall through to comma-separated parsing.
-        }
+const getOrigin = (url: string): string => {
+    try {
+        return new URL(url).origin;
+    } catch {
+        return 'https://ayushdk.github.io';
     }
-
-    return normalized
-        .split(',')
-        .map((origin) => origin.trim().replace(/^['\"]|['\"]$/g, ''))
-        .filter(Boolean)
-        .map((origin) => origin.replace(/\/+$/, ''));
 };
 
-const allowedOrigins = parseAllowedOrigins(process.env.ALLOWED_ORIGINS);
+const allowedOrigin = getOrigin(FRONTEND_URL);
 
 app.use(express.json({ limit: REQUEST_BODY_LIMIT }));
 app.use(express.urlencoded({ extended: true, limit: REQUEST_BODY_LIMIT }));
@@ -68,9 +35,8 @@ app.use(
     cors({
         origin: (requestOrigin, callback) => {
             if (!requestOrigin) return callback(null, true);
-            const normalizedOrigin = requestOrigin.replace(/\/+$/, '');
 
-            if (allowedOrigins.length === 0 || allowedOrigins.includes(normalizedOrigin)) {
+            if (requestOrigin === allowedOrigin) {
                 return callback(null, true);
             }
 

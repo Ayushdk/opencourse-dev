@@ -87,9 +87,7 @@ jobs:
                   - MONGO_URI=${MONGO_URI}
                   - JWT_SECRET=${JWT_SECRET}
                   - JWT_EXPIRY=${JWT_EXPIRY}
-                  - TRUST_PROXY=${TRUST_PROXY}
-                  - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
-                  - ADMIN_SECRET=${ADMIN_SECRET}
+                  - FRONTEND_URL=https://ayushdk.github.io/opencourse-dev/
                 volumes:
                   - uploads-data:/usr/src/app/uploads
 
@@ -103,9 +101,7 @@ jobs:
             MONGO_URI=${{ secrets.MONGO_URI }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             JWT_EXPIRY=${{ secrets.JWT_EXPIRY }}
-            TRUST_PROXY=${{ secrets.TRUST_PROXY }}
-            ALLOWED_ORIGINS=${{ secrets.ALLOWED_ORIGINS }}
-            ADMIN_SECRET=${{ secrets.ADMIN_SECRET }}
+            FRONTEND_URL=https://ayushdk.github.io/opencourse-dev/
             EOF
 
             # 4. Pull the newly pushed image from Docker Hub

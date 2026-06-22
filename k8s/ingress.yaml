@@ -3,11 +3,7 @@ kind: Ingress
 metadata:
   name: opencourse-backend-ingress
   namespace: default
-  annotations:
-    # Uses the Nginx Ingress Controller's rewrite engine
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nginx # Instructs the cluster to route this traffic using the Nginx Ingress Controller
   rules:
     - host: api.opencourse.local # The domain name for your backend API
       http:
