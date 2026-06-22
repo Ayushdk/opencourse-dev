@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev
-      - prod
+      - main
     paths:
       - 'server/**'
       - '.github/workflows/backend-ci.yml'
