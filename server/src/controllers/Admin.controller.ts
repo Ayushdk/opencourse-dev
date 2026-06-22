@@ -25,50 +25,29 @@ function paginationMeta(total: number, page: number, limit: number) {
 /**
  * POST /admin/login  (public — no auth middleware needed)
  *
- * Body: { email: string, password: string, adminSecret: string }
- *
- * The adminSecret must match process.env.ADMIN_SECRET.
- * All three credentials are checked before any specific error is revealed.
+ * Body: { email: string, password: string }
  */
 export const adminLogin = async (req: Request, res: Response) => {
     try {
-        const { email, password, adminSecret } = req.body as {
+        const { email, password } = req.body as {
             email?: string;
             password?: string;
-            adminSecret?: string;
         };
 
-        // 1. All three fields are required
-        if (!email || !password || !adminSecret) {
+        if (!email || !password ) {
             return ApiResponse.error(res, {
-                message: 'email, password, and adminSecret are required',
+                message: 'email and password are required',
                 statusCode: 400,
             });
         }
 
-        // 2. Validate the admin secret first (cheapest check — no DB hit)
-        const expectedSecret = process.env.ADMIN_SECRET;
-        if (!expectedSecret) {
-            console.error('ADMIN_SECRET is not configured in environment variables');
-            return ApiResponse.error(res, {
-                message: 'Admin login is not configured',
-                statusCode: 503,
-            });
-        }
-
-        // Use a constant-time comparison to prevent timing attacks
-        const secretMatches = adminSecret === expectedSecret;
-
-        // 3. Look up the user regardless, so timing is consistent
         const user = await User.findOne({
             email: String(email).toLowerCase().trim(),
         }).select('+password');
 
-        // 4. Validate all three: secret + user exists + role is admin + password correct
         const passwordMatches = user ? await user.comparePassword(password) : false;
-        const isAdmin = user?.role === 'admin';
 
-        if (!secretMatches || !user || !passwordMatches || !isAdmin) {
+        if ( !user || user.role !== 'admin' || !passwordMatches ) {
             // Intentionally vague — don't tell the caller which check failed
             return ApiResponse.error(res, {
                 message: 'Invalid credentials',

@@ -18,7 +18,9 @@ import { User } from '../models/User';
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'admin@opencourse.dev';
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME ?? 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123"; // For security, it's better to require this from env without a default. Change as needed.
+const MONGO_URI = "mongodb+srv://vickyyybeast_db_user:Rm7ME45MqAbcqJzA@cluster0.irtnies.mongodb.net/opencourse?retryWrites=true&w=majority&appName=Cluster0";
+console.log('mongo uri:', MONGO_URI);
 
 async function main() {
     if (!ADMIN_PASSWORD) {
@@ -26,7 +28,7 @@ async function main() {
         process.exit(1);
     }
 
-    const MONGO_URI = process.env.MONGODB_URI;
+
     if (!MONGO_URI) {
         console.error('❌  MONGODB_URI env variable is required.');
         process.exit(1);
